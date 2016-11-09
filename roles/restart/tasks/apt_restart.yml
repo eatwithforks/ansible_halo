@@ -1,0 +1,5 @@
+---
+- name: Restart the Halo Daemon
+  service: name=cphalod state=restarted
+  become: true
+  become_user: root

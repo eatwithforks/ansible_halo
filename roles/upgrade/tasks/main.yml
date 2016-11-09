@@ -1,0 +1,7 @@
+- include: apt_upgrade.yml
+  when: ansible_os_family == 'Debian'
+  tags: upgrade
+
+- include: yum_upgrade.yml
+  when: ansible_os_family == 'RedHat'
+  tags: upgrade

@@ -1,0 +1,8 @@
+---
+- name: Uninstall Halo
+  apt:
+    name: cphalo
+    state: absent
+    purge: yes
+  become: true
+  become_user: root

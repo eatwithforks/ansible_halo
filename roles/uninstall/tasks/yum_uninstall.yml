@@ -1,0 +1,7 @@
+---
+- name: Uninstall Halo
+  yum:
+    name: cphalo
+    state: removed
+  become: true
+  become_user: root

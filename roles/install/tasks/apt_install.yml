@@ -1,0 +1,55 @@
+---
+- name: add CloudPassage repository
+  shell: echo 'deb https://production.packages.cloudpassage.com/debian debian main' | sudo tee /etc/apt/sources.list.d/cloudpassage.list
+
+- name: update apt repositories
+  apt:
+    update_cache: yes
+  become: true
+  become_user: root
+
+- name: install curl
+  package:
+    name: curl
+    state: latest
+
+- name: import CloudPassage public key
+  get_url:
+    url: https://production.packages.cloudpassage.com/cloudpassage.packages.key
+    dest: /tmp/cloudpassage_key.txt
+
+- name: add CloudPassage public key
+  command: apt-key add /tmp/cloudpassage_key.txt
+  become: true
+  become_user: root
+
+- name: update apt repositories
+  apt:
+    update_cache: yes
+  become: true
+  become_user: root
+
+- name: Check if Package is installed
+  command: dpkg-query -l cphalo
+  register: is_installed
+  failed_when: false
+
+- name: install the daemon
+  package:
+    name: cphalo
+    state: latest
+  become: true
+  become_user: root
+  when: is_installed.rc > 0
+
+- name: configure agent key
+  command: "/opt/cloudpassage/bin/configure --agent-key={{ agent_key }} --grid=https://grid.cloudpassage.com/grid --debug"
+  become: true
+  become_user: root
+  when: is_installed.rc > 0
+
+- name: start the daemon for the first time
+  service: name=cphalod state=started
+  become: true
+  become_user: root
+  when: is_installed.rc > 0

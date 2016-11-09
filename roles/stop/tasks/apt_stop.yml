@@ -1,0 +1,5 @@
+---
+- name: Stop the Halo Daemon
+  service: name=cphalod state=stopped
+  become: true
+  become_user: root

@@ -1,0 +1,5 @@
+---
+- name: Upgrades Halo
+  command: yum update cphalo
+  become: true
+  become_user: root

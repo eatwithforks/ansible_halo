@@ -1,0 +1,7 @@
+- include: apt_restart.yml
+  when: ansible_os_family == 'Debian'
+  tags: restart
+
+- include: yum_restart.yml
+  when: ansible_os_family == 'RedHat'
+  tags: restart

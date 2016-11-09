@@ -1,0 +1,7 @@
+- include: apt_stop.yml
+  when: ansible_os_family == 'Debian'
+  tags: stop
+
+- include: yum_stop.yml
+  when: ansible_os_family == 'RedHat'
+  tags: stop

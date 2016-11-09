@@ -1,0 +1,7 @@
+- include: apt_uninstall.yml
+  when: ansible_os_family == 'Debian'
+  tags: uninstall
+
+- include: yum_uninstall.yml
+  when: ansible_os_family == 'RedHat'
+  tags: uninstall

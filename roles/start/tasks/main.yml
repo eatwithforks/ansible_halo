@@ -1,0 +1,7 @@
+- include: apt_start.yml
+  when: ansible_os_family == 'Debian'
+  tags: start
+
+- include: yum_start.yml
+  when: ansible_os_family == 'RedHat'
+  tags: start

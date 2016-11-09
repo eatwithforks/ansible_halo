@@ -1,0 +1,13 @@
+---
+- name: apt-get update
+  apt:
+    update_cache: yes
+  become: true
+  become_user: root
+
+- name: Upgrade Halo
+  package:
+    name: cphalo
+    state: latest
+  become: true
+  become_user: root

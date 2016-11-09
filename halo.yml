@@ -1,0 +1,9 @@
+- name: Configure Halo
+  hosts: all
+  roles:
+    - install
+    - uninstall
+    - upgrade
+    - start
+    - stop
+    - restart
