@@ -7,50 +7,21 @@
 #### Playbook configurations
 
 1. Inside the halo directory, there are 3 things you need to configure:
-    - list of server's ip addresses
-    - their corresponding login usernames
+    - list of server's ip addresses and their corresponding login usernames
     - Halo agent key
 
-2. To add the list of connecting ip addresses, open the file named `hosts`
-
-    Put the corresponding OSes ip addresses under the same groups. `NOTE: The ips in the same group MUST have the same login username`
+2. To add the list of connecting ip addresses and their login usernames, open the file named `hosts`
     
+
     Sample file content
     
     ```
-        [ubuntu]
-        12.34.567.890
-
-        [rpm]
-        21.43.765.089
+        [all]
+        10.10.10.123 ansible_user=ubuntu
+        10.10.10.124 ansible_user=ec2-user
     ```
     
-3. Now that we have the list of ip addresses stored in the inventory file `hosts`, we need to add the list of login usernames.
-    Open the file named `halo.yml`
-
-    Sample file content
-
-    ```
-        - name: Configure Halo on Ubuntu based oses
-          hosts: ubuntu
-          remote_user: ubuntu
-          roles:
-            - install
-            - uninstall
-            - upgrade
-        
-        - name: Configure Halo on RPM based oses
-          hosts: rpm
-          remote_user: ec2-user
-          roles:
-            - install
-            - uninstall
-            - upgrade
-    ```
-    
-    Edit the remote_user to be your server's login username. Here I have the `ubuntu` user for Ubuntu OSes and `ec2-user` for redhat/centos OSes.
-
-4. Open the file `all` located in `group_vars/all` and paste in your Halo agent key.
+3. Open the file `all` located in `group_vars/all` and paste in your Halo agent key.
 
     Sample File content
     
