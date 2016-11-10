@@ -6,7 +6,7 @@
 
 #### Playbook configurations
 
-1. Inside the halo directory, there are 3 things you need to configure:
+1. Inside the halo directory, there are 2 things you need to configure:
     - list of server's ip addresses and their corresponding login usernames
     - Halo agent key
 
