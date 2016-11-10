@@ -32,19 +32,19 @@
 #### Program Usage (Commands) install, upgrade, uninstall, start, stop, restart
 
 1. Run the following command to install Halo.
-    `ansible-playbook -i hosts -u halo.yml --private-key=<ssh_key_path> --sudo -t install`
+    `ansible-playbook -i hosts halo.yml --private-key=<ssh_key_path> --sudo -t install`
 
 2. Run the following command to upgrade Halo.
-    `ansible-playbook -i hosts -u halo.yml --private-key=<ssh_key_path> --sudo -t upgrade`
+    `ansible-playbook -i hosts halo.yml --private-key=<ssh_key_path> --sudo -t upgrade`
 
 3. Run the following command to uninstall Halo.
-    `ansible-playbook -i hosts -u halo.yml --private-key=<ssh_key_path> --sudo -t uninstall`
+    `ansible-playbook -i hosts halo.yml --private-key=<ssh_key_path> --sudo -t uninstall`
 
 4. Run the following command to start Halo.
-    `ansible-playbook -i hosts -u halo.yml --private-key=<ssh_key_path> --sudo -t start`
+    `ansible-playbook -i hosts halo.yml --private-key=<ssh_key_path> --sudo -t start`
 
 5. Run the following command to stop Halo.
-    `ansible-playbook -i hosts -u halo.yml --private-key=<ssh_key_path> --sudo -t stop`
+    `ansible-playbook -i hosts halo.yml --private-key=<ssh_key_path> --sudo -t stop`
 
 6. Run the following command to restart Halo.
-    `ansible-playbook -i hosts -u halo.yml --private-key=<ssh_key_path> --sudo -t restart`
+    `ansible-playbook -i hosts halo.yml --private-key=<ssh_key_path> --sudo -t restart`
