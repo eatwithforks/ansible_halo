@@ -15,6 +15,11 @@
   become: true
   become_user: root
 
+- name: install curl
+  package:
+    name: curl
+    state: latest
+
 - name: Check if Package is installed
   command: rpm -q cphalo
   register: is_installed
@@ -28,8 +33,28 @@
   become_user: root
   when: is_installed.rc > 0
 
+- name: Retrieve AWS Instance metadata
+  get_url:
+    url: http://169.254.169.254/latest/dynamic/instance-identity/document/
+    dest: /etc/foo.conf
+
+- name: instance metadata
+  command: cat /etc/foo.conf
+  register: instance_metadata
+
+- set_fact:
+    data: "{{ instance_metadata.stdout }}"
+
+- name: Retrieve AWS InstanceID
+  shell: python -c "import json, sys; print {{ data }}['instanceId']"
+  register: instance_id
+
+- name: Retrieve AWS accountID
+  shell: python -c "import json, sys; print {{ data }}['accountId']"
+  register: account_id
+
 - name: configure agent key
-  command: "/opt/cloudpassage/bin/configure --agent-key={{ agent_key }} --grid=https://grid.cloudpassage.com/grid --debug"
+  shell: "/opt/cloudpassage/bin/configure --agent-key={{ agent_key }} --grid=https://grid.cloudpassage.com/grid --debug --server-label={{ account_id.stdout }}_{{ instance_id.stdout }}"
   become: true
   become_user: root
   when: is_installed.rc > 0
