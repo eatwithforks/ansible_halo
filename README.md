@@ -48,3 +48,10 @@
 
 6. Run the following command to restart Halo.
     `ansible-playbook -i hosts halo.yml --private-key=<ssh_key_path> --sudo -t restart`
+
+
+<!---
+
+#CPTAGS:community-supported archive
+
+-->
