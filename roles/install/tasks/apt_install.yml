@@ -54,13 +54,31 @@
 - set_fact:
     data: "{{ instance_metadata.stdout }}"
 
-- name: Retrieve AWS InstanceID
-  shell: python -c "import json, sys; print {{ data }}['instanceId']"
-  register: instance_id
+- name: Check if python3
+  command: dpkg -s python3
+  register: is_python_3
+  failed_when: false
 
-- name: Retrieve AWS accountID
-  shell: python -c "import json, sys; print {{ data }}['accountId']"
+- name: Retrieve AWS InstanceID with python3
+  shell: python3 -c "import json, sys; print({{ data }}['instanceId'])"
+  register: instance_id
+  when: is_python_3.rc == 0
+
+- name: Retrieve AWS accountID with python3
+  shell: python3 -c "import json, sys; print({{ data }}['accountId'])"
   register: account_id
+  when: is_python_3.rc == 0
+
+# - name: Retrieve AWS InstanceID
+#   shell: python -c "import json, sys; print {{ data }}['instanceId']"
+#   register: instance_id
+#   when: is_python_3.rc > 0
+
+# - name: Retrieve AWS accountID
+#   shell: python -c "import json, sys; print {{ data }}['accountId']"
+#   register: account_id
+#   when: is_python_3.rc > 0
+
 
 - name: configure agent key
   shell: "/opt/cloudpassage/bin/configure --agent-key={{ agent_key }} --grid=https://grid.cloudpassage.com/grid --debug --server-label={{ account_id.stdout }}_{{ instance_id.stdout }}"
@@ -68,8 +86,26 @@
   become_user: root
   when: is_installed.rc > 0
 
+- name: Check if systemd is installed
+  command: dpkg -s systemd
+  register: is_systemd_installed
+  failed_when: false
+
+- name: Configure systemd
+  script: ./systemd_apt_install.sh
+  when: is_systemd_installed.rc == 0
+
+- name: Check if upstart is installed
+  command: dpkg -s upstart
+  register: is_upstart_installed
+  failed_when: false
+
+- name: Configure upstart
+  script: ./upstart_apt_install.sh
+  when: is_systemd_installed.rc == 1 and is_upstart_installed.rc == 0
+
 - name: start the daemon for the first time
   service: name=cphalod state=started
   become: true
   become_user: root
-  when: is_installed.rc > 0
+  when: is_installed.rc > 0 and is_systemd_installed.rc > 0 and is_upstart_installed.rc > 0

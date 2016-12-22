@@ -53,14 +53,32 @@
   shell: python -c "import json, sys; print {{ data }}['accountId']"
   register: account_id
 
-- name: configure agent key
+- name: Configure agent key
   shell: "/opt/cloudpassage/bin/configure --agent-key={{ agent_key }} --grid=https://grid.cloudpassage.com/grid --debug --server-label={{ account_id.stdout }}_{{ instance_id.stdout }}"
   become: true
   become_user: root
   when: is_installed.rc > 0
 
+- name: Check if systemd is installed
+  command: rpm -q systemd
+  register: is_systemd_installed
+  failed_when: false
+
+- name: Configure systemd
+  script: ./systemd_yum_install.sh
+  when: is_systemd_installed.rc == 0
+
+- name: Check if upstart is installed
+  command: rpm -q upstart
+  register: is_upstart_installed
+  failed_when: false
+
+- name: Configure upstart
+  script: ./upstart_yum_install.sh
+  when: is_systemd_installed.rc == 1 and is_upstart_installed.rc == 0
+
 - name: start the daemon for the first time
   service: name=cphalod state=started
   become: true
   become_user: root
-  when: is_installed.rc > 0
+  when: is_installed.rc > 0 and is_systemd_installed.rc > 0 and is_upstart_installed.rc > 0
