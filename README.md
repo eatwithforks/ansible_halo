@@ -1,5 +1,9 @@
 #### Ansible playbook to install, upgrade, and uninstall Halo agent onto debian and rpm based OSes.
 
+#### Requirement
+
+1. python 2.7.x across all servers
+
 #### Install instructions on MAC OS X
 
 1. Install Ansible `brew install ansible` (If you don't have brew preinstalled, then follow https://valdhaus.co/writings/ansible-mac-osx/ to install ansible)
@@ -11,20 +15,20 @@
     - Halo agent key
 
 2. To add the list of connecting ip addresses and their login usernames, open the file named `hosts`
-    
+
 
     Sample file content
-    
+
     ```
         [all]
         10.10.10.123 ansible_user=ubuntu
         10.10.10.124 ansible_user=ec2-user
     ```
-    
+
 3. Open the file `all` located in `group_vars/all` and paste in your Halo agent key.
 
     Sample File content
-    
+
     ```
         agent_key: abcabcabcabc12345
     ```
