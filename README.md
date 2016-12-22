@@ -8,6 +8,8 @@
 
 1. Install Ansible `brew install ansible` (If you don't have brew preinstalled, then follow https://valdhaus.co/writings/ansible-mac-osx/ to install ansible)
 
+2. Make sure ansible version is 2.2+
+
 #### Playbook configurations
 
 1. Inside the halo directory, there are 2 things you need to configure:
