@@ -54,31 +54,13 @@
 - set_fact:
     data: "{{ instance_metadata.stdout }}"
 
-- name: Check if python3
-  command: dpkg -s python3
-  register: is_python_3
-  failed_when: false
-
-- name: Retrieve AWS InstanceID with python3
-  shell: python3 -c "import json, sys; print({{ data }}['instanceId'])"
+- name: Retrieve AWS InstanceID
+  shell: python -c "import json, sys; print {{ data }}['instanceId']"
   register: instance_id
-  when: is_python_3.rc == 0
 
-- name: Retrieve AWS accountID with python3
-  shell: python3 -c "import json, sys; print({{ data }}['accountId'])"
+- name: Retrieve AWS accountID
+  shell: python -c "import json, sys; print {{ data }}['accountId']"
   register: account_id
-  when: is_python_3.rc == 0
-
-# - name: Retrieve AWS InstanceID
-#   shell: python -c "import json, sys; print {{ data }}['instanceId']"
-#   register: instance_id
-#   when: is_python_3.rc > 0
-
-# - name: Retrieve AWS accountID
-#   shell: python -c "import json, sys; print {{ data }}['accountId']"
-#   register: account_id
-#   when: is_python_3.rc > 0
-
 
 - name: configure agent key
   shell: "/opt/cloudpassage/bin/configure --agent-key={{ agent_key }} --grid=https://grid.cloudpassage.com/grid --debug --server-label={{ account_id.stdout }}_{{ instance_id.stdout }}"
